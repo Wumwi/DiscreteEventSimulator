@@ -1,6 +1,6 @@
 #include "State.h"
 
-void State::scheduleEvent(std::shared_ptr<Event> event) {
+void State::scheduleEvent(Event* event) {
     eventQueue.push(event);
 }
 
@@ -10,6 +10,7 @@ void State::run() {
         eventQueue.pop();
         currentTime = event->time;
         event->execute(*this);
+        delete event;
     }
 }
 

@@ -4,7 +4,7 @@
 
 int main() {
     State s;
-    s.scheduleEvent(std::make_shared<MakePastryEvent>(0));
+    s.scheduleEvent(new MakePastryEvent(0));
     s.run();
 
     return 0;
