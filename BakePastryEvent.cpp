@@ -9,4 +9,6 @@ BakePastryEvent::BakePastryEvent(double t) : Event(t) {}
 void BakePastryEvent::execute(State& s) {
     std::cout << "[Time " << time << "] Baking pastry\n";
     s.scheduleEvent(new SellPastryEvent(time + 3));
+    s.pastriesMaking--;
+    s.pastriesBaking++;
 }

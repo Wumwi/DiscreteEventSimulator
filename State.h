@@ -26,6 +26,10 @@ public:
     void scheduleEvent(Event* event);
     void run();
     double now() const;
+
+    int pastriesMaking = 0;
+    int pastriesBaking = 0;
+    int pastriesSold = 0;
 };
 
 #endif
