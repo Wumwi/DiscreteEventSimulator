@@ -6,9 +6,11 @@
 #include <memory>
 #include <iostream>
 #include <random>
+#include <fstream>
+#include <iomanip>
 #include <string>
 
-double Simulator::run(double make_param, double bake_param, double sell_param, int trials) {
+double Simulator::run(double make_param, double bake_param, double sell_param, int trials, const std::string& csv_path) {
     std::random_device rd;
     std::mt19937 genX(rd());
     std::mt19937 genY(rd());
@@ -44,5 +46,15 @@ double Simulator::run(double make_param, double bake_param, double sell_param, i
     }
 
     double averageRevenue = totalRevenue / trials;
+
+    if (!csv_path.empty()) {
+        std::ofstream file(csv_path, std::ios::app);  // Append mode
+        if (file.is_open()) {
+            file << std::fixed << std::setprecision(4);
+            file << make_param << "," << bake_param << "," << sell_param << "," << averageRevenue << "\n";
+            file.close();
+        }
+    }
+
     return averageRevenue;
 }

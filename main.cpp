@@ -30,6 +30,8 @@ int main(int argc, char* argv[]) {
     }
 
     Simulator sim;
-    std::cout << sim.run(make_param, bake_param, sell_param, trials) << std::endl;
+    std::string csv_path = "sim_log.csv";
+    
+    std::cout << sim.run(make_param, bake_param, sell_param, trials, csv_path) << std::endl;
     return 0;
 }
