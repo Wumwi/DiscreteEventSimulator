@@ -24,11 +24,8 @@ int main(int argc, char* argv[]) {
         bake_param = std::stod(argv[2]);
         sell_param = std::stod(argv[3]);
         trials = std::stoi(argv[4]);
-    } catch (const std::invalid_argument& e) {
-        std::cerr << "Error: One of the arguments is not a valid double." << std::endl;
-        return 1;
-    } catch (const std::out_of_range& e) {
-        std::cerr << "Error: One of the arguments is out of range for a double." << std::endl;
+    } catch (...) {
+        std::cerr << "Invalid parameters" << std::endl;
         return 1;
     }
 

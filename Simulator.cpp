@@ -35,7 +35,7 @@ double Simulator::run(double make_param, double bake_param, double sell_param, i
         double z = distrZ(genZ);
         while (z < s.max()) {
             s.scheduleEvent(new SellPastryEvent(z));
-            z += distrY(genY);
+            z += distrY(genZ);
         }
 
         s.run();
