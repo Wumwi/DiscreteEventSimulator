@@ -21,15 +21,18 @@ private:
     > eventQueue;
 
     double currentTime = 0.0;
+    double maxTime = 100.0;
 
 public:
     void scheduleEvent(Event* event);
     void run();
     double now() const;
+    double max() const;
 
-    int pastriesMaking = 0;
-    int pastriesBaking = 0;
+    int pastriesMade = 0;
+    int pastriesBaked = 0;
     int pastriesSold = 0;
+    double revenue = 0;
 };
 
 #endif

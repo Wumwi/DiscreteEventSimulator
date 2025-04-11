@@ -17,3 +17,7 @@ void State::run() {
 double State::now() const {
     return currentTime;
 }
+
+double State::max() const {
+    return maxTime;
+}

@@ -7,7 +7,8 @@ SRCS = main.cpp \
        State.cpp \
        MakePastryEvent.cpp \
        BakePastryEvent.cpp \
-       SellPastryEvent.cpp
+       SellPastryEvent.cpp \
+       Simulator.cpp
 
 $(TARGET):
 	$(CXX) $(CXXFLAGS) $(SRCS) -o $(TARGET)

@@ -7,7 +7,13 @@
 MakePastryEvent::MakePastryEvent(double t) : Event(t) {}
 
 void MakePastryEvent::execute(State& s) {
-    std::cout << "[Time " << time << "] Making pastry\n";
-    s.scheduleEvent(new BakePastryEvent(time + 2));
-    s.pastriesMaking++;
+    //std::cout << "[Time " << time << "] Making pastry\n";
+
+    // Cap unbaked pastries at 16
+    if (s.pastriesMade < 16) {
+        s.pastriesMade++;
+    } else {
+        // Inflict revenue penalty of 2
+        s.revenue -= 2;
+    }
 }
