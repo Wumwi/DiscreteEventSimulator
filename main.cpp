@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
     double make_param = 1.0;
     double bake_param = 1.0;
     double sell_param = 1.0;
-    int trials = 5000;
+    int trials = 1;
 
     try {
         make_param = std::stod(argv[1]);

@@ -3,6 +3,7 @@
 #include "State.h"
 #include <iostream>
 #include <memory>
+#include <random>
 
 BakePastryEvent::BakePastryEvent(double t) : Event(t) {}
 
@@ -24,5 +25,13 @@ void BakePastryEvent::execute(State& s) {
         // Cost for baking nothing
         s.revenue -= 1.3;
     }
+
+    std::random_device rd;
+    std::mt19937 genX(rd());
+    std::uniform_real_distribution<> distrX(std::numeric_limits<double>::epsilon(), s.bake_param);
     
+    double x = distrX(genX);
+    if (time + x < s.max()) {
+        s.scheduleEvent(new BakePastryEvent(time + x));
+    }
 }

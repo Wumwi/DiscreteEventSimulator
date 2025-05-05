@@ -24,6 +24,8 @@ private:
     double maxTime = 100.0;
 
 public:
+    State() : make_param(1), bake_param(1), sell_param(1) {}
+    State(double p1, double p2, double p3);
     void scheduleEvent(Event* event);
     void run();
     double now() const;
@@ -33,6 +35,10 @@ public:
     int pastriesBaked = 0;
     int pastriesSold = 0;
     double revenue = 0;
+
+    double make_param;
+    double bake_param;
+    double sell_param;  
 };
 
 #endif

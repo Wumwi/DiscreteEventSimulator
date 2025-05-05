@@ -21,25 +21,12 @@ double Simulator::run(double make_param, double bake_param, double sell_param, i
 
     double totalRevenue = 0;
     for (int i=0; i<trials; i++) {
-        State s;
-        double x = distrX(genX);
-        while (x < s.max()) {
-            s.scheduleEvent(new MakePastryEvent(x));
-            x += distrX(genX);
-        }
+        State s(make_param, bake_param, sell_param);
 
-        double y = distrY(genY);
-        while (y < s.max()) {
-            s.scheduleEvent(new BakePastryEvent(y));
-            y += distrY(genY);
-        }
-
-        double z = distrZ(genZ);
-        while (z < s.max()) {
-            s.scheduleEvent(new SellPastryEvent(z));
-            z += distrY(genZ);
-        }
-
+        s.scheduleEvent(new MakePastryEvent(distrX(genX)));
+        s.scheduleEvent(new BakePastryEvent(distrY(genY)));
+        s.scheduleEvent(new SellPastryEvent(distrZ(genZ)));
+  
         s.run();
 
         totalRevenue += s.revenue;
@@ -48,7 +35,7 @@ double Simulator::run(double make_param, double bake_param, double sell_param, i
     double averageRevenue = totalRevenue / trials;
 
     if (!csv_path.empty()) {
-        std::ofstream file(csv_path, std::ios::app);  // Append mode
+        std::ofstream file(csv_path, std::ios::app);  
         if (file.is_open()) {
             file << std::fixed << std::setprecision(4);
             file << make_param << "," << bake_param << "," << sell_param << "," << averageRevenue << "\n";
