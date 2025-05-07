@@ -11,7 +11,7 @@ void BakePastryEvent::execute(State& s) {
     //std::cout << "[Time " << time << "] Baking pastry\n";
 
     // Can bake up to 6 in a single batch
-    if (s.pastriesMade < 6 && s.pastriesMade > 0) {
+    if (s.pastriesMade <= 6 && s.pastriesMade > 0) {
         s.pastriesBaked = s.pastriesMade;
         s.pastriesMade = 0;
         // Cost for baking

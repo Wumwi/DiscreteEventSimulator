@@ -12,9 +12,10 @@ void MakePastryEvent::execute(State& s) {
     // cap unbaked pastries at 16
     if (s.pastriesMade < 16) {
         s.pastriesMade++;
+        s.revenue -= 0.2;
     } else {
-        // Inflict revenue penalty of 2
-        s.revenue -= 2;
+        // Inflict revenue penalty of 0.5
+        s.revenue -= 0.5;
     }
 
     std::random_device rd;
