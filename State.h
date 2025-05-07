@@ -25,7 +25,7 @@ private:
 
 public:
     State() : make_param(1), bake_param(1), sell_param(1) {}
-    State(double p1, double p2, double p3);
+    State(double p1, double p2, double p3) : make_param(p1), bake_param(p2), sell_param(p3) {}
     void scheduleEvent(Event* event);
     void run();
     double now() const;
