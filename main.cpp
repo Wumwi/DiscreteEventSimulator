@@ -29,9 +29,19 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    Simulator sim;
-    std::string csv_path = "sim_log.csv";
-    
-    std::cout << sim.run(make_param, bake_param, sell_param, trials, csv_path) << std::endl;
+    for (int i=0; i<250; i++) {
+        std::random_device rd;
+        std::mt19937 genX(rd());
+        std::uniform_real_distribution<> distrX(std::numeric_limits<double>::epsilon(), 100);
+
+        make_param = distrX(genX);
+        bake_param = distrX(genX);
+        sell_param = distrX(genX);
+
+        Simulator sim;
+        std::string csv_path = "sim_log.csv";
+        
+        std::cout << "#" << i << " " << sim.run(make_param, bake_param, sell_param, trials, csv_path) << std::endl;
+    }
     return 0;
 }
