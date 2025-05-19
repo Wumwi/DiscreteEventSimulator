@@ -28,7 +28,8 @@ double Simulator::run(double make_param, double bake_param, double sell_param, i
         s.scheduleEvent(new SellPastryEvent(distrZ(genZ)));
   
         s.run();
-
+        
+        s.revenue -= s.pastriesMade + s.pastriesBaked;
         totalRevenue += s.revenue;
     }
 

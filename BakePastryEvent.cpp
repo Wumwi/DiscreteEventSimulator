@@ -15,15 +15,15 @@ void BakePastryEvent::execute(State& s) {
         s.pastriesBaked = s.pastriesMade;
         s.pastriesMade = 0;
         // Cost for baking
-        s.revenue -= 0.3;
+        s.revenue -= 0.2;
     } else if (s.pastriesMade > 6) {   
         s.pastriesMade -= 6;
         s.pastriesBaked += 6;
         // Cost for baking
-        s.revenue -= 0.3;
+        s.revenue -= 0.2;
     } else {
         // Cost for baking nothing
-        s.revenue -= 1.3;
+        s.revenue -= 0.4;
     }
 
     std::random_device rd;

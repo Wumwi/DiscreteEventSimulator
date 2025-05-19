@@ -14,8 +14,8 @@ void MakePastryEvent::execute(State& s) {
         s.pastriesMade++;
         s.revenue -= 0.2;
     } else {
-        // Inflict revenue penalty of 0.5
-        s.revenue -= 0.5;
+        // Inflict revenue penalty of 0.4
+        s.revenue -= 0.4;
     }
 
     std::random_device rd;

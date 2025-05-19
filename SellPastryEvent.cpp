@@ -10,17 +10,22 @@ void SellPastryEvent::execute(State& s) {
     //std::cout << "[Time " << time << "] Selling pastry\n";
 
     // Cost function
-    double a = 1.0;
-    double b = std::log(10.0) / 100.0;
-    double cost = a * std::exp(b * s.sell_param);
+    double ideal_ratio = 6.0;
+    double sigma = 10.0;
+    double base_price = 0.2*s.sell_param + 0.25;
+
+    double ratio_term = 0.0;
+    double ratio = s.bake_param / s.make_param;
+    ratio_term = std::exp(-std::pow(ratio - ideal_ratio, 2) / (2 * sigma * sigma));
+
+    double price = base_price * ratio_term;
 
     if (s.pastriesBaked > 0) {
         s.pastriesBaked--;
         s.pastriesSold++;
-        s.revenue += cost;
+        s.revenue += price;
     } else {
-        // Cost for loss of reputation (?)
-        s.revenue -= cost/3;
+        s.revenue -= price / 10;  // Penalty for trying to sell nothing
     }
 
     std::random_device rd;
