@@ -6,13 +6,13 @@ using Vector = Eigen::VectorXd;
 using Matrix = Eigen::MatrixXd;
 private:
     int n;
-    double R;
-    Matrix Q, P;
+    Matrix Q,P;
     Vector theta;
+    double R;
 public:
     KalmanLinearRegression(int dim, double initial_variance = 1e-5, double measurement_noise_variance = 1.0)
-        : n(dim), Q(initial_variance * Matrix::Identity(dim, dim)), R(measurement_noise_variance),
-        theta(Vector::Zero(dim)), P(Matrix::Identity(dim, dim)) {}
+        : n(dim), Q(initial_variance * Matrix::Identity(dim, dim)), P(Matrix::Identity(dim, dim)), 
+        theta(Vector::Zero(dim)), R((measurement_noise_variance)) {}
 
     void update(const Vector& x, double y) {
         P += Q;  // Predict covariance update
@@ -26,4 +26,12 @@ public:
     }
 
     Vector getTheta() const { return theta; }
+
+    double predictVariance(const Vector& x) const {
+        return x.transpose() * P * x + R;
+    }
+
+    double predictMean(const Vector& x) const {
+        return x.dot(theta);
+    }
 };
