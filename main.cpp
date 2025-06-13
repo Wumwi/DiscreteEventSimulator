@@ -6,8 +6,10 @@
 #include "KalmanLinearRegression.h"
 #include <memory>
 #include <iostream>
+#include <iomanip>
 #include <random>
 #include <string>
+#include <fstream>
 #include "eigen/Eigen/Dense"
 
 int main(int argc, char* argv[]) {
@@ -22,7 +24,7 @@ int main(int argc, char* argv[]) {
     int trials = 1;
 
     Simulator sim;
-    std::string csv_path = "sim_log.csv";
+    std::string csv_path = "kalman.csv";
 
     try {
         make_param = std::stod(argv[1]);
@@ -38,32 +40,62 @@ int main(int argc, char* argv[]) {
     double bakeInput = bake_param;
     double sellInput = sell_param;
 
-    for (int i=1; i<=11; i++) {
-        std::random_device rd;
-        std::mt19937 genX(rd());
-        std::uniform_real_distribution<> distrX(std::numeric_limits<double>::epsilon(), 100);
-        std::uniform_real_distribution<> distrY(std::numeric_limits<double>::epsilon(), 100);
-        std::uniform_real_distribution<> distrZ(std::numeric_limits<double>::epsilon(), 100);
+    std::random_device rd;
+    std::mt19937 genX(rd());
+    std::uniform_real_distribution<> distrX(1, 99);
 
-        if (i < 11) {
+    for (int i=1; i<=300; i++) {
+        Eigen::VectorXd x_feat(6);
+        if (i <= 50) {
             make_param = distrX(genX);
-            bake_param = distrY(genX);
-            sell_param = distrZ(genX);
+            bake_param = distrX(genX);
+            sell_param = distrX(genX);
+            double y = sim.run(make_param, bake_param, sell_param, trials, csv_path);
+            x_feat = sim.expandFeatures(make_param, bake_param, sell_param);
+            sim.kl.update(x_feat,y);
+            std::cout << "#" << i << " " << y << std::endl;
+            std::string kalman_path = "kalman_convergence.csv";
+            if (!kalman_path.empty()) {
+                std::ofstream file(kalman_path, std::ios::app);  
+                if (file.is_open()) {
+                    file << std::fixed << std::setprecision(2);
+                    file << i << "," << y << "\n";
+                    file.close();
+                }
+            }
         } else {
-            make_param = makeInput;
-            bake_param = bakeInput;
-            sell_param = sellInput;
-        }
+            double best = -1000;
+            double bestMake, bestBake, bestSell;
+            for (double a=1; a <= 100; a += 5) {
+                for (double b=1; b <= 100; b += 5) {
+                    for (double c=1; c <= 100; c += 5) {
+                        x_feat = sim.expandFeatures(a, b, c);
+                        double acq_value = sim.acquisition(x_feat, 1);
+                        if (acq_value > best) {
+                            best = acq_value;
+                            bestMake = a;
+                            bestBake = b;
+                            bestSell = c;
+                        }
+                    }
+                }
+            }
+            double y = sim.run(bestMake, bestBake, bestSell, trials, csv_path);
+        
+            Eigen::VectorXd best_x_feat = sim.expandFeatures(bestMake, bestBake, bestSell);
+            sim.kl.update(best_x_feat,y);
+            std::cout << "#" << i << " " << y << std::endl;
 
-        Eigen::VectorXd x(3), t(3);
-        x << make_param, bake_param, sell_param;
-        
-        double y = sim.run(make_param, bake_param, sell_param, trials, csv_path);
-        
-        sim.kl.update(x,y);
-        std::cout << "#" << i << " " << y << std::endl;
-        std::cout << "Mean " << sim.kl.predictMean(x) << std::endl;
-        std::cout << "Variance " << sim.kl.predictVariance(x) << std::endl;
+            std::string kalman_path = "kalman_convergence.csv";
+            if (!kalman_path.empty()) {
+                std::ofstream file(kalman_path, std::ios::app);  
+                if (file.is_open()) {
+                    file << std::fixed << std::setprecision(2);
+                    file << i << "," << y << "\n";
+                    file.close();
+                }
+            }
+        }
     }
     return 0;
 }
